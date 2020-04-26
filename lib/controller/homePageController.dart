@@ -10,7 +10,7 @@ import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-class FeedController extends ChangeNotifier {
+class HomePageController extends ChangeNotifier {
   RefreshController refreshController;
   List<UserDetails> userDetails = [];
   List<ArticleDetails> articleDetails = [];
@@ -19,17 +19,16 @@ class FeedController extends ChangeNotifier {
   bool isLoading = true;
   http.Client client;
   Directory _appDoc;
+  bool isSearching = false;
 
-  FeedController({ @required List<ArticleDetails> articleDetails , @required List<UserDetails> userDetails , @required  List<String> pdfPath, @required isSearching}) {
+  HomePageController() {
     refreshController = RefreshController(initialRefresh: false);
     client = new http.Client();
     getApplicationDocumentsDirectory().then((onValue) {
       _appDoc = onValue;
     });
     firestore = Firestore.instance;
-    if(articleDetails.isEmpty && userDetails.isEmpty && pdfPath.isEmpty && !isSearching){
-      getUserArticle();
-    }
+    getUserArticle();
   }
 
   getUserDetails(String userId) async {
@@ -66,20 +65,6 @@ class FeedController extends ChangeNotifier {
     }
   }
 
-  addData(QuerySnapshot data) {
-    articleDetails.clear();
-    data.documents.forEach((element) {
-      DateTime date = DateTime.fromMicrosecondsSinceEpoch(
-          element.data['published_date'] * 1000);
-      if (date.month == DateTime.now().month - 1) {
-        articleDetails
-            .add(ArticleDetails.fromJson(element.data, element.documentID));
-        getUserDetails(element.data['user_id']);
-        getFiles(element.data['file'], element.data['type']);
-      }
-    });
-    checkData();
-  }
 
   getFiles(String fileUrl, String extension) async {
     try {
@@ -102,25 +87,56 @@ class FeedController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onRefresh() async{
-   try{
-     await Future.delayed(Duration(milliseconds: 1000));
-     getUserArticle();
-     refreshController.refreshCompleted();
-   }catch(e){
-     refreshController.refreshFailed();
-   }
+  void onRefresh() async {
+    try {
+      await Future.delayed(Duration(milliseconds: 1000));
+      getUserArticle();
+      refreshController.refreshCompleted();
+    } catch (e) {
+      refreshController.refreshFailed();
+    }
   }
 
-//  void _onLoading() async{
-//    // monitor network fetch
-//    await Future.delayed(Duration(milliseconds: 1000));
-//    // if failed,use loadFailed(),if no data return,use LoadNodata()
-//    items.add((items.length+1).toString());
-//    if(mounted)
-//      setState(() {
-//
-//      });
-//    _refreshController.loadComplete();
-//  }
+  changeSearchFlag() {
+    if (isSearching) {
+      isSearching = false;
+    } else {
+      isSearching = true;
+    }
+    notifyListeners();
+  }
+
+  searchViaName(String name) async {
+    try{
+      userDetails.clear();
+      var data = await firestore.collection("user").orderBy("name").startAt([name]).getDocuments();
+      data.documents.forEach((element) {
+        userDetails.add(UserDetails.fromJson(element.data, element.documentID));
+        getArticles(element.documentID);
+      });
+      checkData();
+      notifyListeners();
+    }catch(e){
+      print(e);
+    }
+  }
+
+  getArticles(String docId) async {
+   try{
+     articleDetails.clear();
+     var data = await firestore.collection("articles").where("user_id",isEqualTo: docId).where("is_approved",isEqualTo: true).getDocuments();
+     data.documents.forEach((element) {
+       DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+           element.data['published_date'] * 1000);
+       if (date.month == DateTime.now().month - 1) {
+         articleDetails.add(
+             ArticleDetails.fromJson(element.data, element.documentID));
+         getFiles(element.data['file'], element.data['type']);
+       }
+     });
+     notifyListeners();
+   }catch(e){
+     print(e);
+   }
+  }
 }

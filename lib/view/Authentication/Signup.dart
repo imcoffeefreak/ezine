@@ -312,7 +312,7 @@ class _UserSignupState extends State<UserSignup> {
                                     email: email.text,
                                     mobile: mobile.text,
                                     password: password.text.toString(),
-                                    profile_pic: "Empty",
+                                    profile_pic: "https://firebasestorage.googleapis.com/v0/b/ezine-2d748.appspot.com/o/profiles%2Finternship3.png?alt=media&token=b8adb5f3-1439-42ff-acb7-013f8665dadc",
                                   );
                                   var data = userDetails.toJson();
                                   await userRegister.registerUser(data);
