@@ -56,10 +56,20 @@ dependencies:
 
   #PDF actions
 #  pdf_previewer: ^0.1.0
+  pdf_viewer_plugin: ^1.0.0+2
   flutter_full_pdf_viewer: ^1.0.6
   path_provider: ^1.6.5
   path: ^1.6.0
   http: ^0.12.0+4
+
+  #file downloader
+  flutter_downloader: ^1.4.3
+
+  #Web-View
+  webview_flutter: ^0.3.20
+
+  #refresh
+  pull_to_refresh: ^1.5.8
 
 dev_dependencies:
   flutter_test:
@@ -78,9 +88,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

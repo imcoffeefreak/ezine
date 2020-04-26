@@ -57,10 +57,9 @@ class UploadController extends ChangeNotifier {
   addArticle(String title, String description, String fileName) async {
     try {
       final date = DateTime.now();
-      var filename = fileName.split('.')[0];
       storageReference = FirebaseStorage.instance
           .ref()
-          .child("articles/$userId/${path.basename(file.path)}}_$date");
+          .child("articles/$userId/${path.basename(file.path)}");
       StorageUploadTask uploadTask = storageReference.putFile(file);
       await uploadTask.onComplete;
       fileUrl = await storageReference.getDownloadURL();
