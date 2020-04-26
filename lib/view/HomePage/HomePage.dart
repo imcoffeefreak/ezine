@@ -41,6 +41,7 @@ class _HomePageState extends State<HomePage>
           builder: (context, homePageController, _) {
             return Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: false,
                 elevation: 0.0,
                 title: (currentIndex == 0)
                     ? Container(

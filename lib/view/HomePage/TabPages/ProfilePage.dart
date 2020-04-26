@@ -358,9 +358,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         0.05),
                                 child: Container(
                                   width:
-                                      MediaQuery.of(context).size.width * 0.3,
+                                      MediaQuery.of(context).size.width * 0.32,
                                   height:
-                                      MediaQuery.of(context).size.height * 0.2,
+                                      MediaQuery.of(context).size.height * 0.15,
                                   child: Text(""),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
@@ -517,17 +517,28 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               .size
                                                               .shortestSide *
                                                           0.02),
-                                                  child: CircleAvatar(
-                                                    radius:
+                                                  child: Container(
+                                                    width:
                                                         MediaQuery.of(context)
                                                                 .size
-                                                                .shortestSide *
-                                                            0.09,
-                                                    child: Image.network(
-                                                      profileController
-                                                          .userDetails[0]
-                                                          .profile_pic,
-                                                      fit: BoxFit.scaleDown,
+                                                                .width *
+                                                            0.2,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.2,
+                                                    child: Text(""),
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                        fit: BoxFit.cover,
+                                                        image: NetworkImage(
+                                                          profileController
+                                                              .userDetails[0]
+                                                              .profile_pic,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

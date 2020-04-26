@@ -322,7 +322,7 @@ class _UserSignupState extends State<UserSignup> {
                                         "User registered successfully. Please login to continue",
                                         context,
                                         duration: Toast.LENGTH_LONG);
-                                    Navigator.pop(context);
+                                    Navigator.pushReplacementNamed(context,'/homepage');
                                   }
                                 }
                               },

@@ -101,14 +101,21 @@ class _FeedPageV2State extends State<FeedPageV2> {
                           child: Row(
                             children: <Widget>[
                               Padding(
-                                padding: EdgeInsets.all(
-                                    MediaQuery.of(context).size.shortestSide *
-                                        0.02),
-                                child: CircleAvatar(
-                                  radius:
-                                      MediaQuery.of(context).size.shortestSide *
-                                          0.09,
-                                  child: FlutterLogo(),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width * 0.2,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  child: Text(""),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        widget.userDetails[index].profile_pic,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                               Column(
