@@ -1,8 +1,11 @@
 import 'package:ezine/routeGeneration.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-void main() => runApp(MyApp());
+void main(){
+  return runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

@@ -74,10 +74,13 @@ class _FeedPageV2State extends State<FeedPageV2> {
                               color: Colors.grey,
                               image: (widget.articleDetails[index].type ==
                                           ".jpg" ||
-                                      widget.articleDetails[index].type ==
+                                      widget
+                                              .articleDetails[index].type ==
                                           ".jpeg" ||
                                       widget.articleDetails[index].type ==
-                                          ".png")
+                                          ".png" ||
+                                      widget.articleDetails[index].type ==
+                                          ".PNG")
                                   ? DecorationImage(
                                       image: NetworkImage(
                                           widget.articleDetails[index].file),
@@ -103,7 +106,8 @@ class _FeedPageV2State extends State<FeedPageV2> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.2,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
                                   height:
                                       MediaQuery.of(context).size.height * 0.2,
                                   child: Text(""),
