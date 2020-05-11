@@ -1,6 +1,6 @@
 import 'package:ezine/controller/HomeTabPages/ProfileController.dart';
-import 'package:ezine/view/ImageView.dart';
-import 'package:ezine/view/PdfViewPage.dart';
+import 'package:ezine/view/HomePage/viewer/ImageView.dart';
+import 'package:ezine/view/HomePage/viewer/PdfViewPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';

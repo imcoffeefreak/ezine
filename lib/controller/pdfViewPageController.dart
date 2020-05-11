@@ -8,7 +8,9 @@ class PdfViewPageController extends ChangeNotifier {
   String path;
 
   PdfViewPageController({String url}) {
-    loadPdf(url);
+    if(url!=null){
+      loadPdf(url);
+    }
   }
 
   void loadPdf(String fileLink) async {

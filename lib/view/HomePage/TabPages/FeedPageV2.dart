@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:ezine/model/Articles/ArticlesDetails.dart';
 import 'package:ezine/model/UserDetails/UserDetails.dart';
-import 'package:ezine/view/ImageView.dart';
-import 'package:ezine/view/PdfView.dart';
+import 'package:ezine/view/HomePage/viewer/ImageView.dart';
+import 'package:ezine/view/HomePage/viewer/PdfView.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:ezine/controller/HomeTabPages/FeedController.dart';
-import 'package:ezine/view/PdfViewPage.dart';
+import 'package:ezine/view/HomePage/viewer/PdfViewPage.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class FeedPageV2 extends StatefulWidget {
