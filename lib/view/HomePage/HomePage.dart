@@ -40,6 +40,26 @@ class _HomePageState extends State<HomePage>
         child: Consumer<HomePageController>(
           builder: (context, homePageController, _) {
             return Scaffold(
+              bottomNavigationBar: (homePageController.isFaculty && currentIndex == 0)
+                  ? Container(
+                      color: Colors.white,
+                      child: CheckboxListTile(
+                        activeColor: Colors.black,
+                        checkColor: Colors.black,
+                        value: homePageController.branchDataChecked,
+                        onChanged: (data) {
+                          homePageController.checkBranch(data);
+                          homePageController.getBranchDataForFaculties(branch: homePageController.dept);
+                        },
+                        title: Text(
+                          "View ${homePageController.dept} articles",
+                          style: GoogleFonts.lato(
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    )
+                  : null,
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 elevation: 0.0,

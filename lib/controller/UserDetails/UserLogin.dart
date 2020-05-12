@@ -9,6 +9,7 @@ class UserLogin extends ChangeNotifier {
   Firestore firestore;
   List<UserDetails> userDetails = [];
   SharedPreferences sharedPreferences;
+  bool isFaculty = false;
 
   UserLogin() {
     auth = FirebaseAuth.instance;
@@ -28,6 +29,7 @@ class UserLogin extends ChangeNotifier {
         sharedPreferences.setString("userId", element.documentID);
         userDetails.add(UserDetails.fromJson(element.data, element.documentID));
       });
+
       var user = await auth.signInWithEmailAndPassword(
           email: userDetails[0].email, password: userDetails[0].password);
       if (data.documents.length == 0 && user.user.uid != null) {

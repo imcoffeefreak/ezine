@@ -19,10 +19,9 @@ import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 
 class PdfViewPage extends StatefulWidget {
-  String path;
   ArticleDetails article = ArticleDetails();
 
-  PdfViewPage({this.path, @required ArticleDetails details}) {
+  PdfViewPage({ @required ArticleDetails details}) {
     if (details != null) {
       article = details;
     } else {
@@ -101,7 +100,6 @@ class _PdfViewPageState extends State<PdfViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("*************** PATH ${widget.path}");
 //    return Scaffold(
 //      appBar: AppBar(
 //        iconTheme: IconThemeData(color: Colors.white),

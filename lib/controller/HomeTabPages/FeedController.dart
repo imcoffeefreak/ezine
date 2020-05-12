@@ -19,8 +19,13 @@ class FeedController extends ChangeNotifier {
   bool isLoading = true;
   http.Client client;
   Directory _appDoc;
+  String dept ="";
+  bool isFaculty = false;
+  bool branchDataChecked = false;
+  SharedPreferences sharedPreferences;  
 
   FeedController({ @required List<ArticleDetails> articleDetails , @required List<UserDetails> userDetails , @required  List<String> pdfPath, @required isSearching}) {
+    getLoggedInUserDetail();
     refreshController = RefreshController(initialRefresh: false);
     client = new http.Client();
     getApplicationDocumentsDirectory().then((onValue) {
@@ -32,6 +37,43 @@ class FeedController extends ChangeNotifier {
     }
   }
 
+  getLoggedInUserDetail() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    var docId = sharedPreferences.getString("userId");
+    
+    var data = await firestore.collection("user").document(docId).get();
+    if(data.data['type'] == "FACULTY"){
+      isFaculty = true;
+      dept = data.data['branch'];
+    }
+    notifyListeners();
+  }
+
+  getBranchDataForFaculties() async {
+    try {
+      articleDetails.clear();
+      var data = await firestore
+          .collection('articles')
+          .where("is_approved", isEqualTo: true)
+          .where("branch", isEqualTo: dept)
+          .getDocuments();
+      data.documents.forEach((element) {
+        DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+            element.data['published_date'] * 1000);
+        if (date.month == DateTime.now().month - 1) {
+          articleDetails
+              .add(ArticleDetails.fromJson(element.data, element.documentID));
+          getUserDetails(element.data['user_id']);
+          getFiles(element.data['file'], element.data['type']);
+        }
+      });
+      checkData();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+  
   getUserDetails(String userId) async {
     try {
       var data = await firestore.collection("user").document(userId).get();

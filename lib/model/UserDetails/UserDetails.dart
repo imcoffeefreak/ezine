@@ -8,6 +8,7 @@ class UserDetails {
   String email;
   String mobile;
   String profile_pic;
+  String type;
 
   UserDetails(
       {this.docId,
@@ -18,6 +19,7 @@ class UserDetails {
       this.password,
       this.email,
       this.mobile,
+        this.type,
       this.profile_pic});
 
   UserDetails.fromJson(Map<String, dynamic> json, String id) {
@@ -30,6 +32,7 @@ class UserDetails {
     email = json['email'];
     mobile = json['mobile'];
     profile_pic = json['profile_pic'];
+    type = json['type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,7 +46,7 @@ class UserDetails {
     data['email'] = this.email;
     data['mobile'] = this.mobile;
     data['profile_pic'] = this.profile_pic;
-
+    data['type'] = "STUDENT";
     return data;
   }
 }

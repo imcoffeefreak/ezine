@@ -20,8 +20,13 @@ class HomePageController extends ChangeNotifier {
   http.Client client;
   Directory _appDoc;
   bool isSearching = false;
+  String dept = "";
+  bool isFaculty = false;
+  bool branchDataChecked = false;
+  SharedPreferences sharedPreferences;
 
   HomePageController() {
+    getLoggedInUserDetail();
     refreshController = RefreshController(initialRefresh: false);
     client = new http.Client();
     getApplicationDocumentsDirectory().then((onValue) {
@@ -31,11 +36,76 @@ class HomePageController extends ChangeNotifier {
     getUserArticle();
   }
 
-  getUserDetails(String userId) async {
+  getLoggedInUserDetail() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    var docId = sharedPreferences.getString("userId");
+
+    var data = await firestore.collection("user").document(docId).get();
+    if (data.data['type'] == "FACULTY") {
+      isFaculty = true;
+      dept = data.data['branch'];
+    }
+    notifyListeners();
+  }
+
+  checkBranch(bool data) {
+    branchDataChecked = data;
+    notifyListeners();
+  }
+
+  getBranchDataForFaculties({String branch}) async {
+    if (branchDataChecked) {
+      try {
+        articleDetails.clear();
+        var user = await firestore
+            .collection("user")
+            .where("branch", isEqualTo: branch)
+            .getDocuments();
+        user.documents.forEach((element) {
+          firestore
+              .collection('articles')
+              .where("is_approved", isEqualTo: true)
+              .where("user_id", isEqualTo: element.documentID)
+              .getDocuments()
+              .then((value) {
+            value.documents.forEach((articles) {
+              articleDetails.add(
+                  ArticleDetails.fromJson(articles.data, articles.documentID));
+            });
+          });
+        });
+
+//        data.documents.forEach((element) {
+//          DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+//              element.data['published_date'] * 1000);
+//          if (date.month == DateTime.now().month - 1) {
+//            articleDetails
+//                .add(ArticleDetails.fromJson(element.data, element.documentID));
+//            getUserDetails(element.data['user_id']);
+//            getFiles(element.data['file'], element.data['type']);
+//          }
+//        });
+        checkData();
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    }else{
+      getUserArticle();
+    }
+  }
+
+  getUserDetails(String userId, {String branch}) async {
     try {
-      var data = await firestore.collection("user").document(userId).get();
-      userDetails.add(UserDetails.fromJson(data.data, data.documentID));
-      notifyListeners();
+      if (branch == null) {
+        var data = await firestore.collection("user").document(userId).get();
+        userDetails.add(UserDetails.fromJson(data.data, data.documentID));
+        notifyListeners();
+      } else {
+        var data = await firestore.collection("user").document(userId).get();
+        userDetails.add(UserDetails.fromJson(data.data, data.documentID));
+        notifyListeners();
+      }
     } catch (e) {
       print(e);
     }
@@ -64,7 +134,6 @@ class HomePageController extends ChangeNotifier {
       print(e);
     }
   }
-
 
   getFiles(String fileUrl, String extension) async {
     try {
@@ -107,36 +176,43 @@ class HomePageController extends ChangeNotifier {
   }
 
   searchViaName(String name) async {
-    try{
+    try {
       userDetails.clear();
-      var data = await firestore.collection("user").orderBy("name").startAt([name]).getDocuments();
+      var data = await firestore
+          .collection("user")
+          .orderBy("name")
+          .startAt([name]).getDocuments();
       data.documents.forEach((element) {
         userDetails.add(UserDetails.fromJson(element.data, element.documentID));
         getArticles(element.documentID);
       });
       checkData();
       notifyListeners();
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
   getArticles(String docId) async {
-   try{
-     articleDetails.clear();
-     var data = await firestore.collection("articles").where("user_id",isEqualTo: docId).where("is_approved",isEqualTo: true).getDocuments();
-     data.documents.forEach((element) {
-       DateTime date = DateTime.fromMicrosecondsSinceEpoch(
-           element.data['published_date'] * 1000);
-       if (date.month == DateTime.now().month - 1) {
-         articleDetails.add(
-             ArticleDetails.fromJson(element.data, element.documentID));
-         getFiles(element.data['file'], element.data['type']);
-       }
-     });
-     notifyListeners();
-   }catch(e){
-     print(e);
-   }
+    try {
+      articleDetails.clear();
+      var data = await firestore
+          .collection("articles")
+          .where("user_id", isEqualTo: docId)
+          .where("is_approved", isEqualTo: true)
+          .getDocuments();
+      data.documents.forEach((element) {
+        DateTime date = DateTime.fromMicrosecondsSinceEpoch(
+            element.data['published_date'] * 1000);
+        if (date.month == DateTime.now().month - 1) {
+          articleDetails
+              .add(ArticleDetails.fromJson(element.data, element.documentID));
+          getFiles(element.data['file'], element.data['type']);
+        }
+      });
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
   }
 }

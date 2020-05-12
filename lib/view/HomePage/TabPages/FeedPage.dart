@@ -193,8 +193,6 @@ class _FeedPageState extends State<FeedPage> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   PdfViewPage(
-                                                    path: feedController
-                                                        .pdfPath[index],
                                                     details: feedController
                                                         .articleDetails[
                                                     index],
@@ -415,8 +413,6 @@ class _FeedPageState extends State<FeedPage> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   PdfViewPage(
-                                                    path: widget
-                                                        .pdfPath[index],
                                                     details: widget
                                                         .articleDetails[
                                                     index],

@@ -632,8 +632,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       builder:
                                                                           (context) =>
                                                                               PdfViewPage(
-                                                                        path: profileController
-                                                                            .pdfPath[index],
+
                                                                         details:
                                                                             profileController.articleDetails[index],
                                                                       ),
